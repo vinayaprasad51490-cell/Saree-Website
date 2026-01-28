@@ -165,4 +165,88 @@ nav {
 #cart-items .card {
     width: 220px;
 }
+/* Common button style */
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  margin: 10px 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
 
+/* View Cart button */
+.btn-cart {
+  background-color: #ff9800; /* orange */
+  color: #ffffff;
+}
+
+.btn-cart:hover {
+  background-color: #e68900;
+  transform: scale(1.05);
+}
+
+/* WhatsApp Order button */
+.btn-whatsapp {
+  background-color: #25D366; /* WhatsApp green */
+  color: #ffffff;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe5d;
+  transform: scale(1.05);
+}
+@media (max-width: 600px) {
+  .btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #820f2c; /* maroon */
+  padding: 15px 20px;
+}
+
+.logo {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* WhatsApp nav button */
+.nav-whatsapp {
+  background-color: #25D366;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-left: 20px;
+}
+
+.nav-whatsapp:hover {
+  background-color: #1ebe5d;
+}
+
+/* Logo image */
+.logo img {
+  height: 250px;        /* small & neat */
+  width: auto;         /* keep ratio */
+  object-fit: contain;
+ 
+}
