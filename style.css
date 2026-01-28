@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial;
     text-align: center;
@@ -21,7 +22,7 @@ h1 {
     width: 100%;
     height: auto;
 }
-nav {
+/*nav {
     background-color: #b03060;
     padding: 15px;
 }
@@ -49,7 +50,7 @@ nav {
     .saree {
         width: 90%;
     }
-}
+}*/
 .products {
     display: flex;
     justify-content: center;
@@ -250,3 +251,68 @@ nav {
   object-fit: contain;
  
 }
+.cart-container {
+  position: relative;
+}
+
+.cart-icon {
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  position: relative;
+}
+
+#cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.navbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background-color: #8b1538;
+  padding: 10px 30px;
+}
+.nav-logo img {
+  height: 45px;
+}
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+.nav-cart {
+  position: relative;
+}
+
+.cart-icon {
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  position: relative;
+}
+
+#cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+

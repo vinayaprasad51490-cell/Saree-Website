@@ -35,3 +35,14 @@ if (window.location.pathname.includes("cart.html")) {
     loadCart();
 }
 localStorage.clear();
+
+
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  document.getElementById("cart-count").innerText = cart.length;
+}
+
+// Run on page load
+updateCartCount();
+
+

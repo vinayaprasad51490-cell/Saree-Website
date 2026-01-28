@@ -13,5 +13,29 @@
 <p id="empty-cart">Your cart is empty</p>
 
 <script src="script.js"></script>
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cartDiv = document.getElementById("cart-items");
+let emptyMsg = document.getElementById("empty-msg");
+
+if (cart.length === 0) {
+  emptyMsg.style.display = "block";
+} else {
+  emptyMsg.style.display = "none";
+
+  cart.forEach(item => {
+    let div = document.createElement("div");
+    div.innerHTML = `
+      <img src="${item.image}" width="100">
+      <h3>${item.name}</h3>
+      <p>₹${item.price}</p>
+      <hr>
+    `;
+    cartDiv.appendChild(div);
+  });
+}
+</script>
+
+
 </body>
 </html>

@@ -6,27 +6,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-   <header class="navbar">
-  <div class="logo">
-    🌸 Saree Store
+  <div class="navbar">
+  
+  <!-- LEFT: LOGO -->
+  <div class="nav-logo">
+    <img src="logo.jpeg" alt="SR Collections">
   </div>
 
-  <nav class="nav-links">
-    <a href="index.html">Home</a>
+  <!-- CENTER: LINKS -->
+  <div class="nav-links">
+    <a href="#">Home</a>
     <a href="cart.html">Cart</a>
-    <a href="#contact">Contact</a>
-    <a href="https://wa.me/916363546295" target="_blank" class="nav-whatsapp">
-      WhatsApp
+    <a href="#">Contact</a>
+  </div>
+
+  <!-- RIGHT: CART -->
+  <div class="nav-cart">
+    <a href= "cart.html" class="cart-icon">
+      🛒
+      <span id="cart-count">0</span>
     </a>
-  </nav>
-</header>
+  </div>
+
+</div>
+
+
 
 
 
     <h1 id="home">Welcome to S.R Collections </h1>
-    <div class="logo">
-  <img src="logo2.png" alt="Saree Store Logo">
-</div>
 
     <p>Elegant sarees for every occasion</p>
 
@@ -39,6 +47,7 @@
         <h3>Silk Saree</h3>
         <p class="price">₹2999</p>
         <button onclick="addToCart('Silk Saree', 2999, 'saree1.jpeg')">Add to Cart</button>
+        
 
 
     </div>
@@ -107,6 +116,27 @@
 
 
     <script src="script.js"></script>
+   <script>
+function addToCart(name, price, image) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  cart.push({
+    name: name,
+    price: price,
+    image: image
+  });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  updateCartCount();   // 🔥 UPDATE BADGE
+  alert("Added to cart!");
+}
+</script>
+
+
+
+
+
 
 </body>
 </html>
