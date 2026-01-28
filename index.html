@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Saree Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+    <a href="#home">Home</a>
+    <a href="#collection">Collection</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+    <h1 id="home">Welcome to S.R Collections </h1>
+    <p>Elegant sarees for every occasion</p>
+
+    <h2 id="collection">Our Collection</h2>
+
+<div class="products">
+
+    <div class="card">
+        <img src="saree1.jpeg" alt="Silk Saree">
+        <h3>Silk Saree</h3>
+        <p class="price">₹2999</p>
+        <button onclick="addToCart('Silk Saree', 2999, 'saree1.jpeg')">Add to Cart</button>
+
+
+    </div>
+
+    <div class="card">
+        <img src="saree2.jpeg" alt="Cotton Saree">
+        <h3>Cotton Saree</h3>
+        <p class="price">₹1999</p>
+        <button onclick="addToCart('Cotton Saree', 1999, 'saree2.jpeg')">Add to Cart</button>
+
+
+    </div>
+
+    <div class="card">
+        <img src="saree3.jpeg" alt="Designer Saree">
+        <h3>Designer Saree</h3>
+        <p class="price">₹3999</p>
+       <button onclick="addToCart('Designer Saree', 3999, 'saree3.jpeg')">Add to Cart</button>
+
+
+    </div>
+
+</div>
+<h2>Gallery</h2>
+
+<div class="gallery">
+    <img src="saree1.jpeg" alt="Saree">
+    <img src="saree2.jpeg" alt="Saree">
+    <img src="saree3.jpeg" alt="Saree">
+    <img src="saree4.jpeg" alt="Saree">
+</div>
+
+<button class="whatsapp-btn" onclick="orderWhatsApp()">
+    Order on WhatsApp
+</button>
+
+
+    <h2 id="contact">Contact Us</h2>
+
+<form class="contact-form" onsubmit="submitForm(); return false;">
+    <input type="text" placeholder="Your Name" required>
+    <input type="tel" placeholder="Phone Number" required>
+    <textarea placeholder="Your Message" required></textarea>
+    <button type="submit">Send Message</button>
+</form>
+
+    <p>📞 6363546295</p>
+    <p>📱 WhatsApp available</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
