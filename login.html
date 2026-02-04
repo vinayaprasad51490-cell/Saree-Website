@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seller Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; margin: 0; }
+        .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+        input { width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #6a1b9a; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>🧑‍💼 Admin Login</h2>
+        <input type="password" id="adminPass" placeholder="Enter Secret Password">
+        <button onclick="checkLogin()">Enter Seller Panel</button>
+        <p><a href="index.html" style="color: gray; font-size: 12px;">Back to Shop</a></p>
+    </div>
+
+    <script>
+        function checkLogin() {
+            const pass = document.getElementById("adminPass").value;
+            // You can change "saree123" to whatever password you like!
+            if (pass === "saree123") {
+                sessionStorage.setItem("isLoggedIn", "true");
+                window.location.href = "seller.html";
+            } else {
+                alert("Incorrect Password!");
+            }
+        }
+    </script>
+</body>
+</html>

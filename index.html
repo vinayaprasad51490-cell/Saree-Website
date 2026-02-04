@@ -4,55 +4,35 @@
     <title>S.R Collections | Shop</title>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f9f9f9; }
-        header { background: #6e1919; color: white; padding: 20px; text-align: center; }
-        
-        /* Style for the Search Bar */
+        header { background: #600; color: white; padding: 30px; text-align: center; }
         .search-container { text-align: center; margin: 20px; }
-        #searchInput { 
-            padding: 12px; 
-            width: 300px; 
-            border-radius: 25px; 
-            border: 1px solid #ddd; 
-            outline: none;
-            font-size: 16px;
-        }
-
+        #searchInput { padding: 12px; width: 300px; border-radius: 25px; border: 1px solid #ddd; outline: none; }
+        .filter-container { text-align: center; margin-bottom: 20px; }
+        .filter-btn { padding: 10px 20px; margin: 5px; border: none; border-radius: 20px; background: #eee; cursor: pointer; }
+        .filter-btn:hover { background: #600; color: white; }
         .grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
-        .card { width: 220px; background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card { width: 220px; background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
         .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
-        a { text-decoration: none; color: black; }
-        h3 { margin: 10px 0 5px 0; font-size: 18px; }
         .price { color: #2e7d32; font-weight: bold; }
-        .filter-btn {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 20px;
-            background: #eee;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-    .filter-btn:hover { background: #6a1b9a; color: white; }
-
+        .sold-out-badge { position: absolute; top: 10px; right: 10px; background: red; color: white; padding: 5px; border-radius: 5px; font-size: 12px; }
+        /* This tells the browser: "If the screen is small, change how the grid looks" */
+@media (max-width: 600px) {
+    .grid {
+        gap: 10px;
+        padding: 10px;
+    }
     .card {
-    width: 220px;
-    height: 380px; /* Forces all cards to be the same height */
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Keeps the button at the bottom */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        width: 45%; /* Shows 2 items side-by-side on mobile */
+        height: auto;
+    }
+    .card img {
+        height: 180px; /* Makes images smaller for phone screens */
+    }
+    #searchInput {
+        width: 80%; /* Makes the search bar fit the phone width */
+    }
 }
-
-.card img {
-    width: 100%;
-    height: 300px; /* Forces all images to be the same height */
-    object-fit: cover; /* Crops the image perfectly without stretching it */
-    border-radius: 8px;
-}
-</style>
+    </style>
 </head>
 <body>
 
@@ -62,33 +42,33 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for sarees (e.g. Silk)..." onkeyup="filterProducts()">
+        <input type="text" id="searchInput" placeholder="Search for sarees..." onkeyup="filterProducts()">
     </div>
 
-    <div class="filter-container" style="text-align: center; margin-bottom: 20px;">
-    <button class="filter-btn" onclick="filterByCategory('All')">All</button>
-    <button class="filter-btn" onclick="filterByCategory('Silk')">Silk</button>
-    <button class="filter-btn" onclick="filterByCategory('Cotton')">Cotton</button>
-    <button class="filter-btn" onclick="filterByCategory('Designer')">Designer</button>
-    <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthis</button>
-</div>
-
+    <div class="filter-container">
+        <button class="filter-btn" onclick="filterByCategory('All')">All</button>
+        <button class="filter-btn" onclick="filterByCategory('Silk')">Silk</button>
+        <button class="filter-btn" onclick="filterByCategory('Cotton')">Cotton</button>
+        <button class="filter-btn" onclick="filterByCategory('Designer')">Designer</button>
+        <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthis</button>
+    </div>
 
     <div id="shopGrid" class="grid"></div>
 
     <script src="app.js"></script>
+
     <script>
         const shopGrid = document.getElementById("shopGrid");
 
-        // 1. Function to show products (we made it a function so we can call it again)
         function renderProducts(productsToDisplay) {
-            if (productsToDisplay.length === 0) {
-                shopGrid.innerHTML = "<h3>No sarees found matching that name.</h3>";
+            if (!productsToDisplay || productsToDisplay.length === 0) {
+                shopGrid.innerHTML = "<h3>No items found matching that selection.</h3>";
                 return;
             }
 
             shopGrid.innerHTML = productsToDisplay.map(p => `
-                <div class="card">
+                <div class="card" style="opacity: ${p.status === 'Sold Out' ? '0.6' : '1'}">
+                    ${p.status === 'Sold Out' ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
                     <a href="details.html?id=${p.id}">
                         <img src="${p.images[0]}">
                         <h3>${p.name}</h3>
@@ -98,30 +78,25 @@
             `).join('');
         }
 
-        // 2. The Search Logic
-        function filterProducts() {
-            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-            
-            // Filter the products list based on the name
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(searchTerm)
-            );
+        function filterByCategory(catName) {
+            if (catName === 'All') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === catName);
+                renderProducts(filtered);
+            }
+        }
 
-            // Redraw the grid with only the matching products
+        function filterProducts() {
+            const term = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
 
-        // Initial show on page load
-        renderProducts(products);
-
-        function filterByCategory(catName) {
-    if (catName === 'All') {
-        renderProducts(products); // Show everything
-    } else {
-        const filtered = products.filter(p => p.category === catName);
-        renderProducts(filtered); // Show only the category selected
-    }
-}
+        // Run this immediately to show your products
+        window.onload = function() {
+            renderProducts(products);
+        };
     </script>
 </body>
 </html>
