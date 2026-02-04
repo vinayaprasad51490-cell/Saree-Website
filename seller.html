@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seller Panel</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .form-box { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; }
+        button { background: green; color: white; padding: 10px; cursor: pointer; border: none; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Manage Your Store</h1>
+    <div class="form-box">
+    <input type="text" id="pName" placeholder="Product Name">
+    <input type="number" id="pPrice" placeholder="Price in ₹">
+    
+    <select id="pCategory" style="width: 95%; padding: 10px; margin: 10px 0;">
+        <option value="Silk">Silk Saree</option>
+        <option value="Cotton">Cotton Saree</option>
+        <option value="Designer">Designer Saree</option>
+        <option value="Kurthis">Kurthi</option>
+    </select>
+
+    <label>Select Images:</label>
+    <input type="file" id="pImages" multiple accept="image/*">
+    <button onclick="addProduct()">Upload Product</button>
+</div>
+    <br>
+    <a href="index.html">Go to Customer Shop Page →</a>
+
+    <hr>
+    <h3>Your Current Inventory</h3>
+    <div id="inventoryList"></div>
+
+    <br><br>
+<button onclick="clearAllProducts()" style="background: black; color: white; padding: 10px; width: 200px; cursor: pointer; border: none; border-radius: 5px;">
+    🗑️ Clear Entire Shop
+</button>
+
+    <script src="app.js"></script>
+    <script>
+        // Show products on the seller page so we can delete them
+        const inventoryDiv = document.getElementById("inventoryList");
+        
+        if(products.length === 0) {
+            inventoryDiv.innerHTML = "<p>Your shop is empty.</p>";
+        } else {
+            inventoryDiv.innerHTML = products.map(p => `
+                <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px; background:white;">
+                    <img src="${p.images[0]}" width="50" style="vertical-align:middle;">
+                    <strong>${p.name}</strong> - ₹${p.price}
+                    <button onclick="deleteProduct(${p.id})" style="float:right; background:red; color:white; border:none; padding:5px; cursor:pointer;">
+                        Delete
+                    </button>
+                </div>
+            `).join('');
+        }
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
