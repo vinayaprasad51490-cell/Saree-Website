@@ -72,6 +72,13 @@
         </button>
     </div>
     <br>
+
+    <div class="reviews-section" style="padding: 20px; margin-top: 30px; background: #f9f9f9; border-radius: 10px;">
+    <h3>Customer Reviews</h3>
+    <div id="reviewsContainer">
+        </div>
+</div>
+
     <a href="index.html" style="color: #6a1b9a; text-decoration: none;">← Back to Shop</a>
 </div>
 
@@ -143,8 +150,44 @@
     } else {
         document.body.innerHTML = "<h2>Product not found! <a href='index.html'>Go Back</a></h2>";
     }
-</script>
 
+    // ... (Keep your top code until the reviewsContainer line)
+
+    const reviewsContainer = document.getElementById("reviewsContainer");
+    const sampleReviews = [
+        { name: "Anita R.", rating: "⭐⭐⭐⭐⭐", text: "The quality of the fabric is amazing. Exactly like the picture!" },
+        { name: "Priya S.", rating: "⭐⭐⭐⭐", text: "Beautiful saree. The delivery was very fast." }
+    ];
+
+    reviewsContainer.innerHTML = sampleReviews.map(rev => `
+        <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+            <strong style="color: #6a1b9a;">${rev.name}</strong> 
+            <span style="font-size: 12px; margin-left: 10px;">${rev.rating}</span>
+            <p style="margin: 5px 0; font-style: italic; color: #555;">"${rev.text}"</p>
+        </div>
+    `).join('');
+
+    // --- FIX STARTS HERE ---
+    if (product) {
+        // Handle the Sale Price Display
+        if (product.originalPrice) {
+            document.getElementById("itemPrice").innerHTML = `
+                <span style="text-decoration: line-through; color: #888; font-size: 18px;">₹${product.originalPrice}</span> 
+                <span style="color: #2e7d32; font-size: 24px; font-weight: bold; margin-left: 10px;">₹${product.price}</span>
+            `;
+        } else {
+            document.getElementById("itemPrice").innerText = "₹" + product.price;
+        }
+
+        // Handle Multiple Images (using the correct ID: thumbRow)
+        const thumbRow = document.getElementById("thumbRow");
+        if (thumbRow && product.images && product.images.length > 1) {
+            thumbRow.innerHTML = product.images.map(img => `
+                <img src="${img}" onclick="document.getElementById('mainDisplay').src='${img}'" 
+                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 5px; border: 2px solid #ddd;">
+            `).join('');
+        }
+    }
 </script>
 </body>
 </html>

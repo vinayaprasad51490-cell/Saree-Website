@@ -101,23 +101,36 @@
 
         // The function to draw products on the screen
         function renderProducts(productsToDisplay) {
-            if (!productsToDisplay || productsToDisplay.length === 0) {
-                shopGrid.innerHTML = "<h3>No items found matching that selection.</h3>";
-                return;
-            }
-
+            const shopGrid = document.getElementById("shopGrid");
             shopGrid.innerHTML = productsToDisplay.map(p => {
-                const linkTarget = p.status === 'Sold Out' ? 'javascript:void(0)' : `details.html?id=${p.id}`;
-                const opacity = p.status === 'Sold Out' ? '0.6' : '1';
-                const cursor = p.status === 'Sold Out' ? 'default' : 'pointer';
+                const isSoldOut = p.status === 'Sold Out';
+                const linkTarget = isSoldOut ? 'javascript:void(0)' : `details.html?id=${p.id}`;
+                
+                // Calculate Discount Percentage
+                let discountBadge = "";
+                if (p.originalPrice && p.originalPrice > p.price) {
+                    const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+                    discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">${discount}% OFF</div>`;
+                }
+
+                const priceHTML = p.originalPrice && p.originalPrice > p.price 
+                    ? `<p class="price">
+                        <span style="text-decoration: line-through; color: #888; font-size: 0.9em; margin-right: 8px;">₹${p.originalPrice}</span>
+                        <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
+                    </p>`
+                    : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
 
                 return `
-                    <div class="card" style="opacity: ${opacity}; cursor: ${cursor}">
-                        ${p.status === 'Sold Out' ? '<div class="sold-out-badge" style="position: absolute; top: 10px; right: 10px; background: red; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">SOLD OUT</div>' : ''}
-                        <a href="${linkTarget}" style="text-decoration: none; color: inherit; cursor: ${cursor}">
-                            <img src="${p.images[0]}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
-                            <h3>${p.name}</h3>
-                            <p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>
+                    <div class="card" style="position: relative; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); opacity: ${isSoldOut ? '0.7' : '1'}; transition: transform 0.2s;">
+                        ${discountBadge}
+                        ${isSoldOut ? '<div class="sold-out-badge" style="position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; z-index: 10; font-size: 12px;">SOLD OUT</div>' : ''}
+                        
+                        <a href="${linkTarget}" style="text-decoration: none; color: inherit; cursor: ${isSoldOut ? 'default' : 'pointer'}">
+                            <img src="${p.images[0]}" style="width: 100%; height: 280px; object-fit: cover;">
+                            <div style="padding: 12px;">
+                                <h3 style="margin: 0; font-size: 1rem; color: #333; height: 2.4em; overflow: hidden;">${p.name}</h3>
+                                ${priceHTML}
+                            </div>
                         </a>
                     </div>
                 `;
@@ -170,6 +183,15 @@ function clearSearch() {
                 console.error("The 'products' variable is missing. Check app.js link.");
             }
         };
+
+        const priceHTML = p.originalPrice 
+    ? `<p class="price">
+         <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-right: 10px;">₹${p.originalPrice}</span>
+         <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
+       </p>`
+    : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
+
+// Then use ${priceHTML} inside your template string...
     </script>
 </body>
 </html>

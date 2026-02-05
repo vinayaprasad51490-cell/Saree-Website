@@ -1,32 +1,35 @@
-// This gets our list of products from the browser's memory
-// This should be the ONLY place this line exists!
+// 1. Initialize the "Brain"
 let products = JSON.parse(localStorage.getItem("mySareeStore")) || [];
 
 function saveData() {
     localStorage.setItem("mySareeStore", JSON.stringify(products));
 }
 
-// Function to handle adding a product with multiple images
+// 2. The MERGED Add Product Function
 async function addProduct() {
-    // 1. Grab the elements
-    const nameEl = document.getElementById("pName");
-    const priceEl = document.getElementById("pPrice");
-    const catEl = document.getElementById("pCategory");
+    // Grab elements (Make sure these match your HTML IDs exactly!)
+    const nameEl = document.getElementById("name") || document.getElementById("pName");
+    const oPriceEl = document.getElementById("originalPrice");
+    const sPriceEl = document.getElementById("salePrice") || document.getElementById("pPrice");
+    const catEl = document.getElementById("category") || document.getElementById("pCategory");
+    const statusEl = document.getElementById("status");
     const imageEl = document.getElementById("pImages");
 
-    // 2. Extract values
+    // Extract values
     const name = nameEl.value;
-    const price = priceEl.value;
+    const oPrice = oPriceEl ? oPriceEl.value : 0;
+    const sPrice = sPriceEl.value;
     const category = catEl.value;
+    const status = statusEl ? statusEl.value : "In Stock";
     const files = imageEl.files;
 
-    // 3. Simple Check: Did you fill it out?
-    if (!name || !price || files.length === 0) {
+    // Validation
+    if (!name || !sPrice || files.length === 0) {
         alert("Wait! Please enter a name, price, and select at least one image.");
         return;
     }
 
-    // 4. Convert images to a format the browser can remember
+    // Convert ALL selected images to data strings
     const imagePromises = Array.from(files).map(file => {
         return new Promise(resolve => {
             const reader = new FileReader();
@@ -35,61 +38,84 @@ async function addProduct() {
         });
     });
 
-    const images = await Promise.all(imagePromises);
+    const finalImages = await Promise.all(imagePromises);
 
-    // 5. Create the product
+    // Create the product object
     const newProduct = {
         id: Date.now(),
         name: name,
-        price: price,
+        price: Number(sPrice),
+        originalPrice: Number(oPrice),
         category: category,
-        images: images,
-        status: "In Stock"
+        status: status, 
+        images: finalImages // This saves ALL images you selected
     };
 
-    // 6. Push to the list and SAVE to the brain
+    // Save to memory
     products.push(newProduct);
-    localStorage.setItem("mySareeStore", JSON.stringify(products));
-
-    // 7. Success Message
-    alert("✅ Success! " + name + " has been added to your shop.");
+    saveData();
     
-    // 8. Refresh the inventory list on the screen
-    if (typeof displayInventory === "function") {
-        displayInventory();
-    }
-
-    // 9. Clear the form for the next item
-    nameEl.value = "";
-    priceEl.value = "";
+    alert("Saree Uploaded Successfully!");
+    location.reload(); // This refreshes the page to show the new item
 }
 
-// Function to delete a product
+// 3. Inventory & Management Functions
 function deleteProduct(id) {
-    // Ask the user if they are sure
     if (confirm("Are you sure you want to delete this saree?")) {
-        // Keep everything EXCEPT the product that matches this ID
         products = products.filter(item => item.id !== id);
-        
-        // Save the new list and refresh the screen
         saveData();
         window.location.reload();
     }
 }
 
 function clearAllProducts() {
-    if (confirm("WARNING: This will delete EVERY product in your store. Are you sure?")) {
-        localStorage.removeItem("mySareeStore"); // Wipes the specific storage
-        products = []; // Clears the list in the current window
-        window.location.reload(); // Refreshes the page
+    if (confirm("WARNING: This will delete EVERY product. Are you sure?")) {
+        localStorage.removeItem("mySareeStore");
+        products = [];
+        window.location.reload();
     }
 }
 
+function displayInventory() {
+    const inventoryContainer = document.getElementById("inventoryContainer");
+    if (!inventoryContainer) return;
+
+    inventoryContainer.innerHTML = products.map(p => `
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background: white;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; max-width: 250px;">
+                    ${p.images.map(img => `
+                        <img src="${img}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;">
+                    `).join('')}
+                </div>
+                
+                <div style="flex-grow: 1;">
+                    <h4 style="margin: 0;">${p.name}</h4>
+                    <p style="margin: 5px 0; color: #666;">
+                        <span style="color: green; font-weight: bold;">₹${p.price}</span> 
+                        <span style="text-decoration: line-through; font-size: 0.9em; margin-left: 5px;">₹${p.originalPrice}</span>
+                    </p>
+                    <span style="font-size: 12px; padding: 2px 6px; border-radius: 10px; background: ${p.status === 'Sold Out' ? '#ffebee' : '#e8f5e9'}; color: ${p.status === 'Sold Out' ? 'red' : 'green'};">
+                        ${p.status}
+                    </span>
+                </div>
+
+                <button onclick="deleteProduct(${p.id})" style="background: #ff4d4d; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px;">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Run this when the page loads
+window.onload = displayInventory;
+
+// This function must be in the global scope to be "seen" by the button
 function toggleStatus(id) {
     const product = products.find(p => p.id === id);
     if (product) {
+        // Toggles the stock status
         product.status = (product.status === "In Stock") ? "Sold Out" : "In Stock";
-        saveData();
-        window.location.reload();
+        saveData(); // Essential to update localStorage!
+        location.reload(); 
     }
 }

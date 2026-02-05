@@ -20,7 +20,9 @@
 
     <div class="form-box">
         <input type="text" id="pName" placeholder="Product Name">
-        <input type="number" id="pPrice" placeholder="Price in ₹">
+        <input type="number" id="originalPrice" placeholder="Original Price (MRP)">
+        <input type="number" id="salePrice" placeholder="Sale Price (Discounted)">
+
         
         <select id="pCategory" style="width: 95%; padding: 10px; margin: 10px 0;">
             <option value="Silk">Silk Saree</option>
@@ -28,6 +30,7 @@
             <option value="Designer">Designer Saree</option>
             <option value="Kurthis">Kurthi</option>
         </select>
+
 
         <label>Select Images:</label>
         <input type="file" id="pImages" multiple accept="image/*">
@@ -45,6 +48,7 @@
         🗑️ Clear Entire Shop
     </button>
 
+    
     <script src="app.js"></script>
 
     <script>
@@ -92,6 +96,8 @@
 
         // 3. Run when page loads
         window.onload = displayInventory;
+
+        
     </script>
 </body>
 </html>
