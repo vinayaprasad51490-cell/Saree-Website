@@ -70,6 +70,22 @@
     color: #888;
     pointer-events: none; /* Makes sure you can still click the input */
 }
+
+.filter-btn {
+    padding: 8px 20px;
+    border: 1px solid #6a1b9a;
+    background: white;
+    color: #6a1b9a;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: #6a1b9a;
+    color: white;
+}
 </style>
 </head>
 <body>
@@ -84,15 +100,47 @@
     <input type="text" id="searchInput" placeholder="Search for sarees..." onkeyup="filterProducts()">
 </div>
 
-    <div class="filter-container">
+    <div class="filter-container" style="text-align: center; margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
         <button class="filter-btn" onclick="filterByCategory('All')">All</button>
-        <button class="filter-btn" onclick="filterByCategory('Silk')">Silk</button>
+        <button class="filter-btn" onclick="filterByCategory('Silk')">Silk Sarees</button>
         <button class="filter-btn" onclick="filterByCategory('Cotton')">Cotton</button>
         <button class="filter-btn" onclick="filterByCategory('Designer')">Designer</button>
-        <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthis</button>
+        <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthi Sets</button>
     </div>
 
     <div id="shopGrid" class="grid"></div>
+
+    <footer style="background: #2c3e50; color: white; padding: 20px 10px; margin-top: 30px; text-align: center; border-top: 4px solid #ff9f00;">
+    <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;">
+        
+        <div style="flex: 1; min-width: 280px;">
+            <h3 style="color: #ff9f00; text-transform: uppercase; letter-spacing: 1px;">Contact Us</h3>
+            <p style="margin: 10px 0;">📍 123 Saree Lane, Textile District, India</p>
+            <p style="margin: 10px 0;">📞 +91 81518 25736</p>
+            <p style="margin: 10px 0;">✉️ support@yourstore.com</p>
+        </div>
+
+        <div style="flex: 1; min-width: 280px;">
+            <h3 style="color: #ff9f00; text-transform: uppercase; letter-spacing: 1px;">Follow Our Collection</h3>
+            <p style="margin: 10px 0;">Stay updated with our latest arrivals daily!</p>
+            <div style="margin-top: 15px;">
+                <a href="https://www.instagram.com/s.r.collections_26?igsh=cHdzZ2U1ZW5mYmkz" target="_blank" 
+           style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+           Instagram
+        </a>
+        
+        <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" target="_blank" 
+           style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+           WhatsApp Group
+        </a>
+     </div>
+        </div>
+
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #555; margin: 30px auto; width: 80%;">
+    <p style="font-size: 14px; color: #bdc3c7;">&copy; 2026 Your Saree Store. Always Open for You. All Rights Reserved.</p>
+</footer>
 
     <script src="app.js"></script>
 
@@ -138,14 +186,22 @@
         }
 
         // The function your buttons are looking for!
-        function filterByCategory(catName) {
-            if (catName === 'All') {
-                renderProducts(products);
-            } else {
-                const filtered = products.filter(p => p.category === catName);
-                renderProducts(filtered);
-            }
+        function filterByCategory(category) {
+        if (category === 'All') {
+            renderProducts(products);
+        } else {
+            const filtered = products.filter(p => p.category === category);
+            renderProducts(filtered);
         }
+        
+        // Optional: Visual feedback for which button is active
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.innerText === category || (category === 'All' && btn.innerText === 'All')) {
+                btn.classList.add('active');
+            }
+        });
+    }
 
         // The function for the search bar
         function filterProducts() {

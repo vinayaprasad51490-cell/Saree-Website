@@ -3,7 +3,12 @@
 <head>
     <title>Saree Details</title>
     <style>
-        body { font-family: sans-serif; padding: 30px; display: flex; gap: 50px; }
+        body { 
+        font-family: sans-serif; 
+        padding: 0; 
+        margin: 0; 
+        display: block; /* Explicitly tell it NOT to flex */
+    }
         .image-gallery { flex: 1; }
         .info-panel { flex: 1; }
         
@@ -51,45 +56,94 @@
     justify-content: center;
     gap: 10px;
 }
-    </style>
+    /* Remove flex from body */
+    body { 
+        font-family: sans-serif; 
+        padding: 0; 
+        margin: 0; 
+    }
+
+    /* Add flex to this container instead */
+    .product-container {
+        display: flex; 
+        gap: 50px; 
+        padding: 30px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* Ensure mobile responsiveness */
+    @media (max-width: 768px) {
+        .product-container {
+            flex-direction: column;
+        }
+    }
+    
+    /* ... rest of your gallery and button styles ... */
+</style>
+
 </head>
 <body>
+   <body>
+    <div class="product-container">
+        <div class="image-gallery">
+            <img id="mainDisplay" src="">
+            <div id="thumbRow" class="thumb-row"></div>
+        </div>
 
-    <div class="image-gallery">
-        <img id="mainDisplay" src="">
-        <div id="thumbRow" class="thumb-row"></div>
+        <div class="info-panel">
+            <h1 id="itemName">Saree Name</h1>
+            <p class="price" id="itemPrice"></p>
+            <p style="color: #666;">Free Delivery | Cash on Delivery Available</p>
+            
+            <div class="button-group">
+                <button class="buy-now">BUY NOW</button>
+                <button id="whatsappBtn">
+                    <span>Order on WhatsApp</span>
+                </button>
+            </div>
+            
+            <div class="reviews-section" style="padding: 20px; margin-top: 30px; background: #f9f9f9; border-radius: 10px;">
+                <h3>Customer Reviews</h3>
+                <div id="reviewsContainer"></div>
+            </div>
+
+            <br>
+            <a href="index.html" style="color: #6a1b9a; text-decoration: none;">← Back to Shop</a>
+        </div>
+    </div> <hr style="margin-top: 50px; border: 0; border-top: 1px solid #ddd;">
+    <div style="padding: 20px;">
+        <h3>You Might Also Like</h3>
+        <div id="relatedGrid" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;"></div>
     </div>
 
-   <div class="info-panel">
-    <h1 id="itemName">Saree Name</h1>
-    <p class="price" id="itemPrice"></p>
-    <p style="color: #666;">Free Delivery | Cash on Delivery Available</p>
-    
-    <div class="button-group">
-        <button class="buy-now">BUY NOW</button>
-        <button id="whatsappBtn">
-            <span>Order on WhatsApp</span>
-        </button>
-    </div>
-    <br>
-
-    <div class="reviews-section" style="padding: 20px; margin-top: 30px; background: #f9f9f9; border-radius: 10px;">
-    <h3>Customer Reviews</h3>
-    <div id="reviewsContainer">
+   <footer style="background: #2c3e50; color: white; padding: 20px 10px; margin-top: 30px; text-align: center; border-top: 4px solid #ff9f00;">
+        <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;">
+            <div style="flex: 1; min-width: 280px;">
+                <h3 style="color: #ff9f00;">Contact Us</h3>
+                <p>📍 123 Saree Lane, Textile District, India</p>
+                <p>📞 +91 81518 25736</p>
+                <p>✉️ support@yourstore.com</p>
+            </div>
+            <div style="flex: 1; min-width: 280px;">
+                <h3 style="color: #ff9f00;">Follow Our Collection</h3>
+                <p>Stay updated with our latest arrivals daily!</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://www.instagram.com/s.r.collections_26?igsh=cHdzZ2U1ZW5mYmkz" target="_blank" 
+                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+                        Instagram
+                    </a>
+                        
+                    <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" target="_blank" 
+                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+                        WhatsApp Group
+                    </a>
+                </div>
+            </div>
         </div>
-</div>
-
-    <a href="index.html" style="color: #6a1b9a; text-decoration: none;">← Back to Shop</a>
-</div>
-
-<hr style="margin-top: 50px; border: 0; border-top: 1px solid #ddd;">
-<div style="padding: 20px;">
-    <h3>You Might Also Like</h3>
-    <div id="relatedGrid" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;">
-        </div>
-</div>
-   
-
+        <hr style="border: 0; border-top: 1px solid #555; margin: 30px auto; width: 80%;">
+        <p style="font-size: 14px;">&copy; 2026 Your Saree Store. Always Open for You.</p>
+    </footer>
 
   
 <script src="app.js"></script>
@@ -120,7 +174,7 @@
         } else {
             // WhatsApp Logic
             whatsappBtn.onclick = function() {
-                const phoneNumber = "910000000000"; 
+                const phoneNumber = "918151825736"; 
                 const message = `Hi! I want to order this: \nName: ${product.name} \nPrice: ₹${product.price}`;
                 const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
