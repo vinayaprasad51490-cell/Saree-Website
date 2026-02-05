@@ -24,6 +24,7 @@
     .card {
         width: 45%; /* Shows 2 items side-by-side on mobile */
         height: auto;
+        position: relative;
     }
     .card img {
         height: 180px; /* Makes images smaller for phone screens */
@@ -31,8 +32,45 @@
     #searchInput {
         width: 80%; /* Makes the search bar fit the phone width */
     }
+    .sold-out-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgb(219, 21, 21);
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 3px;
+        z-index: 10;
+    }
 }
-    </style>
+
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 12px 12px 12px 40px; /* Extra padding on the left for the icon */
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    pointer-events: none; /* Makes sure you can still click the input */
+}
+</style>
 </head>
 <body>
 
@@ -42,8 +80,9 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for sarees..." onkeyup="filterProducts()">
-    </div>
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search for sarees..." onkeyup="filterProducts()">
+</div>
 
     <div class="filter-container">
         <button class="filter-btn" onclick="filterByCategory('All')">All</button>
@@ -97,10 +136,30 @@
 
         // The function for the search bar
         function filterProducts() {
-            const term = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
-        }
+    const term = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+    
+    const shopGrid = document.getElementById("shopGrid");
+    
+    if (filtered.length === 0) {
+        shopGrid.innerHTML = `
+            <div style="text-align: center; width: 100%; padding: 50px; color: #666;">
+                <p style="font-size: 18px;">No sarees found matching "${term}"</p>
+                <button onclick="clearSearch()" style="background: #6a1b9a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                    View All Products
+                </button>
+            </div>
+        `;
+    } else {
+        renderProducts(filtered);
+    }
+}
+
+// Add this helper function to clear the search
+function clearSearch() {
+    document.getElementById("searchInput").value = "";
+    renderProducts(products);
+}
 
         // Run this immediately to show your products when page opens
         window.onload = function() {
