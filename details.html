@@ -71,58 +71,89 @@
             <span>Order on WhatsApp</span>
         </button>
     </div>
-    
     <br>
     <a href="index.html" style="color: #6a1b9a; text-decoration: none;">← Back to Shop</a>
+</div>
+
+<hr style="margin-top: 50px; border: 0; border-top: 1px solid #ddd;">
+<div style="padding: 20px;">
+    <h3>You Might Also Like</h3>
+    <div id="relatedGrid" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;">
+        </div>
 </div>
    
 
 
   <script src="app.js"></script>
+<script src="app.js"></script>
 <script>
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
     const product = products.find(p => p.id == productId);
 
     if (product) {
-        // FIX: Match these IDs to your HTML (itemName, itemPrice, mainDisplay)
-        document.getElementById("itemName").innerText = product.name;
-        document.getElementById("itemPrice").innerText = "₹" + product.price;
-        document.getElementById("mainDisplay").src = product.images[0];
+        // Use ID names that match your HTML exactly
+        if(document.getElementById("itemName")) document.getElementById("itemName").innerText = product.name;
+        if(document.getElementById("itemPrice")) document.getElementById("itemPrice").innerText = "₹" + product.price;
+        if(document.getElementById("mainDisplay")) document.getElementById("mainDisplay").src = product.images[0];
 
-        // 1. Get the thumbnail row element
-const thumbRow = document.getElementById("thumbRow");
+        // --- RELATED PRODUCTS LOGIC ---
+        const relatedGrid = document.getElementById("relatedGrid");
+        if (relatedGrid) {
+            // Find items in the same category, excluding the current one
+            const related = products.filter(p => p.category === product.category && p.id !== product.id);
 
-        // 2. Clear anything inside it and add the product's images
-        thumbRow.innerHTML = product.images.map((imgSrc, index) => `
-            <img src="${imgSrc}" 
-                style="width: 70px; height: 70px; object-fit: cover; cursor: pointer; border: 2px solid #ddd; border-radius: 5px;" 
-                onclick="changeMainImage('${imgSrc}')"
-                alt="Saree view ${index + 1}">
-        `).join('');
-
-        // 3. The function that switches the big image
-        function changeMainImage(src) {
-            document.getElementById("mainDisplay").src = src;
+            if (related.length > 0) {
+                relatedGrid.innerHTML = related.map(p => `
+                    <div style="min-width: 150px; text-align: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <a href="details.html?id=${p.id}" style="text-decoration: none; color: black;">
+                            <img src="${p.images[0]}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px;">
+                            <p style="font-size: 14px; margin: 5px 0;">${p.name}</p>
+                            <b style="color: green;">₹${p.price}</b>
+                        </a>
+                    </div>
+                `).join('');
+            } else {
+                relatedGrid.innerHTML = "<p style='color: gray;'>No similar items found yet.</p>";
+            }
         }
+    } else {
+        document.body.innerHTML = "<h2>Product not found! <a href='index.html'>Go Back</a></h2>";
+    }
 
-        // 3. Make the WhatsApp Button Work
-        const whatsappBtn = document.getElementById("whatsappBtn");
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    const buyNowBtn = document.querySelector(".buy-now");
+
+    // NEW: Check if the product is sold out
+    if (product.status === "Sold Out") {
+        // 1. Hide the buttons
+        whatsappBtn.style.display = "none";
+        buyNowBtn.style.display = "none";
+
+        // 2. Show a red "Sold Out" message instead
+        const infoPanel = document.querySelector(".info-panel");
+        const soldOutNotice = document.createElement("div");
+        soldOutNotice.innerHTML = `
+            <h2 style="color: #ff4d4d; border: 2px solid #ff4d4d; padding: 10px; display: inline-block; border-radius: 5px;">
+                🚫 Currently Sold Out
+            </h2>
+            <p style="color: #666;">This item is no longer available for purchase.</p>
+        `;
+        infoPanel.appendChild(soldOutNotice);
+    } else {
+        // Only make the buttons work if the item is NOT sold out
         whatsappBtn.onclick = function() {
-            const phoneNumber = "917676836312"; // Your number
+            const phoneNumber = "910000000000"; 
             const message = `Hi! I want to order this: \nName: ${product.name} \nPrice: ₹${product.price}`;
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         };
 
-        // 4. Make the BUY NOW Button also go to WhatsApp
-        document.querySelector(".buy-now").onclick = function() {
-            whatsappBtn.click(); // This just triggers the WhatsApp logic above
+        buyNowBtn.onclick = function() {
+            whatsappBtn.click();
         };
-
-    } else {
-        document.body.innerHTML = "<h2>Product not found! <a href='index.html'>Go Back</a></h2>";
     }
+
 </script>
 </body>
 </html>
