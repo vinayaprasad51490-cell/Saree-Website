@@ -88,7 +88,7 @@
     
         <div style="display: flex; align-items: center; gap: 20px;">
             <a href="index.html">
-                <img src="logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
+                <img src="logo.jpeg" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
             </a>
             <div style="text-align: left;">
                 <h1 style="margin: 0; font-size: 1.8rem; letter-spacing: 1px;">S.R Collections</h1>
@@ -116,6 +116,9 @@
                 <button class="buy-now">BUY NOW</button>
                 <button id="whatsappBtn">
                     <span>Order on WhatsApp</span>
+                </button>
+                <button id="shareBtn" style="background-color: #34b7f1; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px;">
+                    📲 Share with Friends
                 </button>
             </div>
             
@@ -196,6 +199,20 @@
                 window.open(url, '_blank');
             };
             buyNowBtn.onclick = function() { whatsappBtn.click(); };
+        }
+
+        const shareBtn = document.getElementById("shareBtn");
+
+        if (shareBtn && product) {
+            shareBtn.onclick = function() {
+                // This gets the exact link of the saree the customer is looking at
+                const currentUrl = window.location.href;
+                const shareMessage = `Check out this beautiful saree from S.R Collections! 😍\n\n*${product.name}*\nPrice: ₹${product.price}\n\nView here: ${currentUrl}`;
+                
+                // Opens WhatsApp share window
+                const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+                window.open(whatsappShareUrl, '_blank');
+            };
         }
 
         // 3. Load Related Products (Same Category)

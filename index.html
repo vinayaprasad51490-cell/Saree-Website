@@ -94,7 +94,7 @@
     
         <div style="display: flex; align-items: center; gap: 20px;">
             <a href="index.html">
-                <img src="logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
+                <img src="logo.jpeg" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
             </a>
             <div style="text-align: left;">
                 <h1 style="margin: 0; font-size: 1.8rem; letter-spacing: 1px;">S.R Collections</h1>
@@ -107,10 +107,14 @@
         </div>
     </header>
 
-    <div class="search-container">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search for sarees..." onkeyup="filterProducts()">
-</div>
+    <div class="search-container" style="max-width: 600px; margin: 20px auto; padding: 0 20px; display: flex; gap: 10px;">
+        <input type="text" id="searchInput" placeholder="Search by name, color, or category..." 
+            style="flex: 1; padding: 12px; border: 2px solid #800000; border-radius: 25px; outline: none; font-size: 16px;">
+        <button onclick="searchProducts()" 
+            style="background: #800000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold;">
+            Search
+        </button>
+    </div>
 
     <div class="filter-container" style="text-align: center; margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
         <button class="filter-btn" onclick="filterByCategory('All')">All</button>
@@ -135,20 +139,20 @@
         <div style="flex: 1; min-width: 280px;">
             <h3 style="color: #ff9f00; text-transform: uppercase; letter-spacing: 1px;">Follow Our Collection</h3>
             <p style="margin: 10px 0;">Stay updated with our latest arrivals daily!</p>
-            <div style="margin-top: 15px;">
-                <a href="https://www.instagram.com/s.r.collections_26?igsh=cHdzZ2U1ZW5mYmkz" target="_blank" 
-           style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
-           Instagram
-        </a>
-        
-        <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" target="_blank" 
-           style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
-           WhatsApp Group
-        </a>
-     </div>
+                <div style="margin-top: 15px;">
+                    <a href="https://www.instagram.com/s.r.collections_26?igsh=cHdzZ2U1ZW5mYmkz" target="_blank" 
+                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+                        Instagram
+                        </a>
+                        
+                        <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" target="_blank" 
+                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
+                        WhatsApp Group
+                    </a>
+                </div>
         </div>
-
     </div>
+        
     
     <hr style="border: 0; border-top: 1px solid #555; margin: 30px auto; width: 80%;">
     <p style="font-size: 14px; color: #bdc3c7;">&copy; 2026 Your Saree Store. Always Open for You. All Rights Reserved.</p>
@@ -253,13 +257,27 @@ function clearSearch() {
         };
 
         const priceHTML = p.originalPrice 
-    ? `<p class="price">
-         <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-right: 10px;">₹${p.originalPrice}</span>
-         <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
-       </p>`
-    : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
+            ? `<p class="price">
+                <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-right: 10px;">₹${p.originalPrice}</span>
+                <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
+            </p>`
+            : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
+function searchProducts() {
+    const query = document.getElementById("searchInput").value.toLowerCase();
+    
+    // Filters products based on name or category
+    const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.category.toLowerCase().includes(query)
+    );
 
-// Then use ${priceHTML} inside your template string...
+    // Reuse your existing render function to show the results
+    renderProducts(filtered);
+}
+
+// Optional: Search automatically as the user types
+document.getElementById("searchInput").addEventListener("input", searchProducts);
+
     </script>
 </body>
 </html>
