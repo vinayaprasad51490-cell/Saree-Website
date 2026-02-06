@@ -4,118 +4,36 @@
     <title>S.R Collections | Shop</title>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f9f9f9; }
-        header { background: #600; color: white; padding: 30px; text-align: center; }
-        .search-container { text-align: center; margin: 20px; }
-        #searchInput { padding: 12px; width: 300px; border-radius: 25px; border: 1px solid #ddd; outline: none; }
-        .filter-container { text-align: center; margin-bottom: 20px; }
-        .filter-btn { padding: 10px 20px; margin: 5px; border: none; border-radius: 20px; background: #eee; cursor: pointer; }
-        .filter-btn:hover { background: #600; color: white; }
+        header { background: #800000; color: white; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
         .card { width: 220px; background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
         .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
         .price { color: #2e7d32; font-weight: bold; }
-        .sold-out-badge { position: absolute; top: 10px; right: 10px; background: red; color: white; padding: 5px; border-radius: 5px; font-size: 12px; }
-        /* This tells the browser: "If the screen is small, change how the grid looks" */
-@media (max-width: 600px) {
-    .grid {
-        gap: 10px;
-        padding: 10px;
-    }
-    .card {
-        width: 45%; /* Shows 2 items side-by-side on mobile */
-        height: auto;
-        position: relative;
-    }
-    .card img {
-        height: 180px; /* Makes images smaller for phone screens */
-    }
-    #searchInput {
-        width: 80%; /* Makes the search bar fit the phone width */
-    }
-    .sold-out-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgb(219, 21, 21);
-        color: white;
-        padding: 5px 10px;
-        font-weight: bold;
-        border-radius: 3px;
-        z-index: 10;
-    }
-}
+        .filter-btn { padding: 8px 20px; border: 1px solid #6a1b9a; background: white; color: #6a1b9a; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .filter-btn.active { background: #6a1b9a; color: white; }
 
-.search-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 20px auto;
-}
-
-#searchInput {
-    width: 100%;
-    padding: 12px 12px 12px 40px; /* Extra padding on the left for the icon */
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-    pointer-events: none; /* Makes sure you can still click the input */
-}
-
-.filter-btn {
-    padding: 8px 20px;
-    border: 1px solid #6a1b9a;
-    background: white;
-    color: #6a1b9a;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.filter-btn:hover, .filter-btn.active {
-    background: #6a1b9a;
-    color: white;
-}
-</style>
+        @media (max-width: 600px) {
+            .card { width: 45%; }
+            .card img { height: 180px; }
+        }
+    </style>
 </head>
 <body>
 
-   <header style="background-color: #800000; color: white; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-    
+    <header>
         <div style="display: flex; align-items: center; gap: 20px;">
-            <a href="index.html">
-                <img src="logo.jpeg" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
-            </a>
-            <div style="text-align: left;">
-                <h1 style="margin: 0; font-size: 1.8rem; letter-spacing: 1px;">S.R Collections</h1>
+            <a href="index.html"><img src="logo.jpeg" alt="Logo" style="height: 60px;"></a>
+            <div>
+                <h1 style="margin: 0; font-size: 1.8rem;">S.R Collections</h1>
                 <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">Premium Sarees</p>
             </div>
         </div>
-
-        <div style="display: none; @media (min-width: 768px) { display: block; }">
-            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">HOME</a>
-        </div>
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">HOME</a>
     </header>
 
-   
-
     <div class="search-container" style="max-width: 600px; margin: 20px auto; padding: 0 20px; display: flex; gap: 10px;">
-        <input type="text" id="searchInput" placeholder="Search by name, color, or category..." 
-            style="flex: 1; padding: 12px; border: 2px solid #800000; border-radius: 25px; outline: none; font-size: 16px;">
-        <button onclick="searchProducts()" 
-            style="background: #800000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold;">
-            Search
-        </button>
+        <input type="text" id="searchInput" placeholder="Search sarees..." style="flex: 1; padding: 12px; border: 2px solid #800000; border-radius: 25px; outline: none;">
+        <button onclick="searchProducts()" style="background: #800000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold;">Search</button>
     </div>
 
     <div class="filter-container" style="text-align: center; margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
@@ -126,181 +44,89 @@
         <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthi Sets</button>
     </div>
 
-     <div id="featuredSection" style="max-width: 1000px; margin: 20px auto; padding: 20px;">
-        <h2 style="text-align: center; color: #800000; text-transform: uppercase; letter-spacing: 2px;">✨ Top Picks for You</h2>
-        <div id="featuredGrid" class="grid" style="gap: 20px;">
-            </div>
+    <div id="featuredSection">
+        <h2 style="text-align: center; color: #800000;">✨ Top Picks for You</h2>
+        <div id="featuredGrid" class="grid"></div>
         <hr style="border: 0; border-top: 2px solid #eee; margin: 40px 0;">
     </div>
 
     <div id="shopGrid" class="grid"></div>
 
-    
-
-    <footer style="background: #2c3e50; color: white; padding: 20px 10px; margin-top: 30px; text-align: center; border-top: 4px solid #ff9f00;">
-    <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;">
-        
-        <div style="flex: 1; min-width: 280px;">
-            <h3 style="color: #ff9f00; text-transform: uppercase; letter-spacing: 1px;">Contact Us</h3>
-            <p style="margin: 10px 0;">📍 123 Saree Lane, Textile District, India</p>
-            <p style="margin: 10px 0;">📞 +91 81518 25736</p>
-            <p style="margin: 10px 0;">✉️ support@yourstore.com</p>
-        </div>
-
-        <div style="flex: 1; min-width: 280px;">
-            <h3 style="color: #ff9f00; text-transform: uppercase; letter-spacing: 1px;">Follow Our Collection</h3>
-            <p style="margin: 10px 0;">Stay updated with our latest arrivals daily!</p>
-                <div style="margin-top: 15px;">
-                    <a href="https://www.instagram.com/s.r.collections_26?igsh=cHdzZ2U1ZW5mYmkz" target="_blank" 
-                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
-                        Instagram
-                        </a>
-                        
-                        <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" target="_blank" 
-                        style="color: white; text-decoration: none; margin: 0 10px; padding: 5px 15px; border: 1px solid #fff; border-radius: 5px;">
-                        WhatsApp Group
-                    </a>
-                </div>
-        </div>
-    </div>
-        
-    
-    <hr style="border: 0; border-top: 1px solid #555; margin: 30px auto; width: 80%;">
-    <p style="font-size: 14px; color: #bdc3c7;">&copy; 2026 Your Saree Store. Always Open for You. All Rights Reserved.</p>
-</footer>
-
     <script src="app.js"></script>
-<script>
-    // 1. Core Function: Draw products on the screen
-    function renderProducts(productsToDisplay) {
-        const shopGrid = document.getElementById("shopGrid");
-        if (!shopGrid) return;
+    <script>
+        function renderProducts(productsToDisplay) {
+            const shopGrid = document.getElementById("shopGrid");
+            if (!shopGrid) return;
 
-        shopGrid.innerHTML = productsToDisplay.map(p => {
-            const isSoldOut = p.status === 'Sold Out';
-            const linkTarget = isSoldOut ? 'javascript:void(0)' : `details.html?id=${p.id}`;
-            
-            // Calculate Discount Badge
-            let discountBadge = "";
-            if (p.originalPrice && p.originalPrice > p.price) {
-                const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
-                discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">${discount}% OFF</div>`;
-            }
+            shopGrid.innerHTML = productsToDisplay.map(p => {
+                const isSoldOut = p.status === 'Sold Out';
+                
+                // Stock Badge Calculation
+                let stockBadge = "";
+                if (!isSoldOut && p.stock && p.stock <= 3) {
+                    stockBadge = `<div style="position: absolute; top: 40px; left: 10px; background: #ff9f00; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; z-index: 5; border: 1px solid white;">🔥 Only ${p.stock} left!</div>`;
+                }
 
-            // Create Price Display
-            const priceHTML = p.originalPrice && p.originalPrice > p.price 
-                ? `<p class="price">
-                    <span style="text-decoration: line-through; color: #888; font-size: 0.9em; margin-right: 8px;">₹${p.originalPrice}</span>
-                    <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
-                   </p>`
-                : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
+                // Discount Badge Calculation
+                let discountBadge = "";
+                if (p.originalPrice && p.originalPrice > p.price) {
+                    const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+                    discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">${discount}% OFF</div>`;
+                }
 
-            return `
-                <div class="card" style="position: relative; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); opacity: ${isSoldOut ? '0.7' : '1'}; transition: transform 0.2s;">
-                    ${discountBadge}
-                    ${isSoldOut ? '<div class="sold-out-badge" style="position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; z-index: 10; font-size: 12px;">SOLD OUT</div>' : ''}
-                    
-                    <a href="${linkTarget}" style="text-decoration: none; color: inherit; cursor: ${isSoldOut ? 'default' : 'pointer'}">
-                        <img src="${p.images[0]}" style="width: 100%; height: 280px; object-fit: cover;">
-                        <div style="padding: 12px;">
-                            <h3 style="margin: 0; font-size: 1rem; color: #333; height: 2.4em; overflow: hidden;">${p.name}</h3>
-                            ${priceHTML}
-                        </div>
+                const priceHTML = p.originalPrice && p.originalPrice > p.price 
+                    ? `<p class="price"><span style="text-decoration: line-through; color: #888; font-size: 0.9em; margin-right: 8px;">₹${p.originalPrice}</span>₹${p.price}</p>`
+                    : `<p class="price">₹${p.price}</p>`;
+
+                return `
+                    <div class="card" style="opacity: ${isSoldOut ? '0.7' : '1'};">
+                        ${discountBadge}
+                        ${stockBadge}
+                        ${isSoldOut ? '<div style="position: absolute; top: 10px; right: 10px; background: red; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">SOLD OUT</div>' : ''}
+                        <a href="details.html?id=${p.id}" style="text-decoration: none; color: inherit;">
+                            <img src="${p.images[0]}">
+                            <div style="padding: 12px;">
+                                <h3 style="margin: 0; font-size: 1rem; color: #333;">${p.name}</h3>
+                                ${priceHTML}
+                            </div>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderFeatured() {
+            const featuredGrid = document.getElementById("featuredGrid");
+            const featuredItems = products.filter(p => p.status !== 'Sold Out').slice(0, 3);
+            featuredGrid.innerHTML = featuredItems.map(p => `
+                <div class="card" style="width: 280px; transform: scale(1.05); border: 2px solid #ffd700;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">BEST SELLER</div>
+                    <a href="details.html?id=${p.id}" style="text-decoration: none; color: inherit;">
+                        <img src="${p.images[0]}" style="height: 320px;">
+                        <div style="padding: 15px;"><h3>${p.name}</h3><p class="price">₹${p.price}</p></div>
                     </a>
                 </div>
-            `;
-        }).join('');
-    }
+            `).join('');
+        }
 
-    // 2. Filter Function
-    function filterByCategory(cat) {
-        // Highlight active button
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.innerText.includes(cat) || (cat === 'All' && btn.innerText === 'All')) {
-                btn.classList.add('active');
+        function filterByCategory(cat) {
+            const filtered = cat === 'All' ? products : products.filter(p => p.category === cat);
+            renderProducts(filtered);
+        }
+
+        function searchProducts() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        window.onload = function() {
+            if (typeof products !== 'undefined') {
+                renderFeatured();
+                renderProducts(products);
+                document.getElementById("searchInput").addEventListener("input", searchProducts);
             }
-        });
-
-        if (cat === 'All') {
-            renderProducts(products);
-        } else {
-            const filtered = products.filter(p => p.category === cat);
-            renderProducts(filtered);
-        }
-    }
-
-    // 3. Search Function
-    function searchProducts() {
-        const query = document.getElementById("searchInput").value.toLowerCase();
-        const filtered = products.filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            p.category.toLowerCase().includes(query)
-        );
-
-        const shopGrid = document.getElementById("shopGrid");
-        if (filtered.length === 0) {
-            shopGrid.innerHTML = `<div style="text-align: center; width: 100%; padding: 50px; color: #666;">
-                <p style="font-size: 18px;">No sarees found matching "${query}"</p>
-                <button onclick="clearSearch()" style="background: #800000; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">View All</button>
-            </div>`;
-        } else {
-            renderProducts(filtered);
-        }
-    }
-
-    function clearSearch() {
-        document.getElementById("searchInput").value = "";
-        renderProducts(products);
-    }
-
-    // 4. Initialization
-    window.onload = function() {
-        if (typeof products !== 'undefined') {
-            renderProducts(products);
-            // Attach real-time search typing
-            document.getElementById("searchInput").addEventListener("input", searchProducts);
-        } else {
-            console.error("The 'products' variable is missing. Check app.js.");
-        }
-    };
-
-    function renderFeatured() {
-    const featuredGrid = document.getElementById("featuredGrid");
-    // This looks through your products and takes the top 3 that are available
-    const featuredItems = products.filter(p => p.status !== 'Sold Out').slice(0, 3);
-    
-    featuredGrid.innerHTML = featuredItems.map(p => {
-        // We use your existing logic for badges and prices
-        let discountBadge = "";
-        if (p.originalPrice && p.originalPrice > p.price) {
-            const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
-            discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">BEST SELLER</div>`;
-        }
-
-        return `
-            <div class="card" style="width: 280px; transform: scale(1.05); border: 2px solid #ffd700;">
-                ${discountBadge}
-                <a href="details.html?id=${p.id}" style="text-decoration: none; color: inherit;">
-                    <img src="${p.images[0]}" style="width: 100%; height: 320px; object-fit: cover;">
-                    <div style="padding: 15px;">
-                        <h3 style="margin: 0; font-size: 1.1rem;">${p.name}</h3>
-                        <p class="price" style="color: #2e7d32; font-size: 1.2rem;">₹${p.price}</p>
-                    </div>
-                </a>
-            </div>
-        `;
-    }).join('');
-}
-
-// Update your window.onload to include this new section
-window.onload = function() {
-    if (typeof products !== 'undefined') {
-        renderProducts(products); // Your main list
-        renderFeatured();         // Your new top picks
-        document.getElementById("searchInput").addEventListener("input", searchProducts);
-    }
-};
-</script>
+        };
+    </script>
 </body>
 </html>
