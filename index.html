@@ -107,6 +107,8 @@
         </div>
     </header>
 
+   
+
     <div class="search-container" style="max-width: 600px; margin: 20px auto; padding: 0 20px; display: flex; gap: 10px;">
         <input type="text" id="searchInput" placeholder="Search by name, color, or category..." 
             style="flex: 1; padding: 12px; border: 2px solid #800000; border-radius: 25px; outline: none; font-size: 16px;">
@@ -124,7 +126,16 @@
         <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthi Sets</button>
     </div>
 
+     <div id="featuredSection" style="max-width: 1000px; margin: 20px auto; padding: 20px;">
+        <h2 style="text-align: center; color: #800000; text-transform: uppercase; letter-spacing: 2px;">✨ Top Picks for You</h2>
+        <div id="featuredGrid" class="grid" style="gap: 20px;">
+            </div>
+        <hr style="border: 0; border-top: 2px solid #eee; margin: 40px 0;">
+    </div>
+
     <div id="shopGrid" class="grid"></div>
+
+    
 
     <footer style="background: #2c3e50; color: white; padding: 20px 10px; margin-top: 30px; text-align: center; border-top: 4px solid #ff9f00;">
     <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;">
@@ -159,125 +170,137 @@
 </footer>
 
     <script src="app.js"></script>
-
-    <script>
+<script>
+    // 1. Core Function: Draw products on the screen
+    function renderProducts(productsToDisplay) {
         const shopGrid = document.getElementById("shopGrid");
+        if (!shopGrid) return;
 
-        // The function to draw products on the screen
-        function renderProducts(productsToDisplay) {
-            const shopGrid = document.getElementById("shopGrid");
-            shopGrid.innerHTML = productsToDisplay.map(p => {
-                const isSoldOut = p.status === 'Sold Out';
-                const linkTarget = isSoldOut ? 'javascript:void(0)' : `details.html?id=${p.id}`;
-                
-                // Calculate Discount Percentage
-                let discountBadge = "";
-                if (p.originalPrice && p.originalPrice > p.price) {
-                    const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
-                    discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">${discount}% OFF</div>`;
-                }
+        shopGrid.innerHTML = productsToDisplay.map(p => {
+            const isSoldOut = p.status === 'Sold Out';
+            const linkTarget = isSoldOut ? 'javascript:void(0)' : `details.html?id=${p.id}`;
+            
+            // Calculate Discount Badge
+            let discountBadge = "";
+            if (p.originalPrice && p.originalPrice > p.price) {
+                const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+                discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">${discount}% OFF</div>`;
+            }
 
-                const priceHTML = p.originalPrice && p.originalPrice > p.price 
-                    ? `<p class="price">
-                        <span style="text-decoration: line-through; color: #888; font-size: 0.9em; margin-right: 8px;">₹${p.originalPrice}</span>
-                        <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
-                    </p>`
-                    : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
+            // Create Price Display
+            const priceHTML = p.originalPrice && p.originalPrice > p.price 
+                ? `<p class="price">
+                    <span style="text-decoration: line-through; color: #888; font-size: 0.9em; margin-right: 8px;">₹${p.originalPrice}</span>
+                    <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
+                   </p>`
+                : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
 
-                return `
-                    <div class="card" style="position: relative; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); opacity: ${isSoldOut ? '0.7' : '1'}; transition: transform 0.2s;">
-                        ${discountBadge}
-                        ${isSoldOut ? '<div class="sold-out-badge" style="position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; z-index: 10; font-size: 12px;">SOLD OUT</div>' : ''}
-                        
-                        <a href="${linkTarget}" style="text-decoration: none; color: inherit; cursor: ${isSoldOut ? 'default' : 'pointer'}">
-                            <img src="${p.images[0]}" style="width: 100%; height: 280px; object-fit: cover;">
-                            <div style="padding: 12px;">
-                                <h3 style="margin: 0; font-size: 1rem; color: #333; height: 2.4em; overflow: hidden;">${p.name}</h3>
-                                ${priceHTML}
-                            </div>
-                        </a>
-                    </div>
-                `;
-            }).join('');
-        }
+            return `
+                <div class="card" style="position: relative; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); opacity: ${isSoldOut ? '0.7' : '1'}; transition: transform 0.2s;">
+                    ${discountBadge}
+                    ${isSoldOut ? '<div class="sold-out-badge" style="position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; z-index: 10; font-size: 12px;">SOLD OUT</div>' : ''}
+                    
+                    <a href="${linkTarget}" style="text-decoration: none; color: inherit; cursor: ${isSoldOut ? 'default' : 'pointer'}">
+                        <img src="${p.images[0]}" style="width: 100%; height: 280px; object-fit: cover;">
+                        <div style="padding: 12px;">
+                            <h3 style="margin: 0; font-size: 1rem; color: #333; height: 2.4em; overflow: hidden;">${p.name}</h3>
+                            ${priceHTML}
+                        </div>
+                    </a>
+                </div>
+            `;
+        }).join('');
+    }
 
-        // The function your buttons are looking for!
-        function filterByCategory(category) {
-        if (category === 'All') {
-            renderProducts(products);
-        } else {
-            const filtered = products.filter(p => p.category === category);
-            renderProducts(filtered);
-        }
-        
-        // Optional: Visual feedback for which button is active
+    // 2. Filter Function
+    function filterByCategory(cat) {
+        // Highlight active button
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.remove('active');
-            if(btn.innerText === category || (category === 'All' && btn.innerText === 'All')) {
+            if(btn.innerText.includes(cat) || (cat === 'All' && btn.innerText === 'All')) {
                 btn.classList.add('active');
             }
         });
+
+        if (cat === 'All') {
+            renderProducts(products);
+        } else {
+            const filtered = products.filter(p => p.category === cat);
+            renderProducts(filtered);
+        }
     }
 
-        // The function for the search bar
-        function filterProducts() {
-    const term = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+    // 3. Search Function
+    function searchProducts() {
+        const query = document.getElementById("searchInput").value.toLowerCase();
+        const filtered = products.filter(p => 
+            p.name.toLowerCase().includes(query) || 
+            p.category.toLowerCase().includes(query)
+        );
+
+        const shopGrid = document.getElementById("shopGrid");
+        if (filtered.length === 0) {
+            shopGrid.innerHTML = `<div style="text-align: center; width: 100%; padding: 50px; color: #666;">
+                <p style="font-size: 18px;">No sarees found matching "${query}"</p>
+                <button onclick="clearSearch()" style="background: #800000; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">View All</button>
+            </div>`;
+        } else {
+            renderProducts(filtered);
+        }
+    }
+
+    function clearSearch() {
+        document.getElementById("searchInput").value = "";
+        renderProducts(products);
+    }
+
+    // 4. Initialization
+    window.onload = function() {
+        if (typeof products !== 'undefined') {
+            renderProducts(products);
+            // Attach real-time search typing
+            document.getElementById("searchInput").addEventListener("input", searchProducts);
+        } else {
+            console.error("The 'products' variable is missing. Check app.js.");
+        }
+    };
+
+    function renderFeatured() {
+    const featuredGrid = document.getElementById("featuredGrid");
+    // This looks through your products and takes the top 3 that are available
+    const featuredItems = products.filter(p => p.status !== 'Sold Out').slice(0, 3);
     
-    const shopGrid = document.getElementById("shopGrid");
-    
-    if (filtered.length === 0) {
-        shopGrid.innerHTML = `
-            <div style="text-align: center; width: 100%; padding: 50px; color: #666;">
-                <p style="font-size: 18px;">No sarees found matching "${term}"</p>
-                <button onclick="clearSearch()" style="background: #6a1b9a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
-                    View All Products
-                </button>
+    featuredGrid.innerHTML = featuredItems.map(p => {
+        // We use your existing logic for badges and prices
+        let discountBadge = "";
+        if (p.originalPrice && p.originalPrice > p.price) {
+            const discount = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+            discountBadge = `<div style="position: absolute; top: 10px; left: 10px; background: #388e3c; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 5;">BEST SELLER</div>`;
+        }
+
+        return `
+            <div class="card" style="width: 280px; transform: scale(1.05); border: 2px solid #ffd700;">
+                ${discountBadge}
+                <a href="details.html?id=${p.id}" style="text-decoration: none; color: inherit;">
+                    <img src="${p.images[0]}" style="width: 100%; height: 320px; object-fit: cover;">
+                    <div style="padding: 15px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">${p.name}</h3>
+                        <p class="price" style="color: #2e7d32; font-size: 1.2rem;">₹${p.price}</p>
+                    </div>
+                </a>
             </div>
         `;
-    } else {
-        renderProducts(filtered);
+    }).join('');
+}
+
+// Update your window.onload to include this new section
+window.onload = function() {
+    if (typeof products !== 'undefined') {
+        renderProducts(products); // Your main list
+        renderFeatured();         // Your new top picks
+        document.getElementById("searchInput").addEventListener("input", searchProducts);
     }
-}
-
-// Add this helper function to clear the search
-function clearSearch() {
-    document.getElementById("searchInput").value = "";
-    renderProducts(products);
-}
-
-        // Run this immediately to show your products when page opens
-        window.onload = function() {
-            // Check if products exists from app.js
-            if (typeof products !== 'undefined') {
-                renderProducts(products);
-            } else {
-                console.error("The 'products' variable is missing. Check app.js link.");
-            }
-        };
-
-        const priceHTML = p.originalPrice 
-            ? `<p class="price">
-                <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-right: 10px;">₹${p.originalPrice}</span>
-                <span style="color: #2e7d32; font-weight: bold;">₹${p.price}</span>
-            </p>`
-            : `<p class="price" style="color: #2e7d32; font-weight: bold;">₹${p.price}</p>`;
-function searchProducts() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    
-    // Filters products based on name or category
-    const filtered = products.filter(p => 
-        p.name.toLowerCase().includes(query) || 
-        p.category.toLowerCase().includes(query)
-    );
-
-    // Reuse your existing render function to show the results
-    renderProducts(filtered);
-}
-
-// Optional: Search automatically as the user types
-document.getElementById("searchInput").addEventListener("input", searchProducts);
-
-    </script>
+};
+</script>
 </body>
 </html>

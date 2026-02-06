@@ -172,48 +172,39 @@
     const product = products.find(p => p.id == productId);
 
     if (product) {
-        // 1. Display Main Product Info
-        // We use IDs that match your HTML: itemName, itemPrice, mainDisplay
+        // --- ADD THESE LINES TO DEFINE YOUR BUTTONS ---
+        const buyNowBtn = document.querySelector(".buy-now"); 
+        const whatsappBtn = document.getElementById("whatsappBtn");
+        const shareBtn = document.getElementById("shareBtn");
+        const orderPopup = document.getElementById("orderPopup");
+        const popupItemName = document.getElementById("popupItemName");
+        // ----------------------------------------------
+
+        // Display Basic Info
         document.getElementById("itemName").innerText = product.name;
-        document.getElementById("itemPrice").innerText = "₹" + product.price;
         document.getElementById("mainDisplay").src = product.images[0];
 
-        const whatsappBtn = document.getElementById("whatsappBtn");
-        const buyNowBtn = document.querySelector(".buy-now");
-
-        // 2. Handle "Sold Out" Status
-        if (product.status === "Sold Out") {
-            whatsappBtn.style.display = "none";
-            buyNowBtn.style.display = "none";
-            
-            const infoPanel = document.querySelector(".info-panel");
-            const soldOutLabel = document.createElement("h2");
-            soldOutLabel.innerHTML = "<span style='color:red;'>🚫 SOLD OUT</span>";
-            infoPanel.appendChild(soldOutLabel);
-        } else {
-            // WhatsApp Logic
-            whatsappBtn.onclick = function() {
-                const phoneNumber = "918151825736"; 
-                const message = `Hi! I want to order this: \nName: ${product.name} \nPrice: ₹${product.price}`;
-                const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                window.open(url, '_blank');
+        // Logic for the Buy Now & WhatsApp Order buttons
+        if (product.status !== "Sold Out") {
+            buyNowBtn.onclick = function() {
+                popupItemName.innerText = product.name;
+                orderPopup.style.display = "flex";
             };
-            buyNowBtn.onclick = function() { whatsappBtn.click(); };
+            
+            whatsappBtn.onclick = function() {
+                buyNowBtn.onclick(); // Triggers the same popup
+            };
         }
 
-        const shareBtn = document.getElementById("shareBtn");
-
-        if (shareBtn && product) {
+        // Logic for the Share button
+        if (shareBtn) {
             shareBtn.onclick = function() {
-                // This gets the exact link of the saree the customer is looking at
                 const currentUrl = window.location.href;
                 const shareMessage = `Check out this beautiful saree from S.R Collections! 😍\n\n*${product.name}*\nPrice: ₹${product.price}\n\nView here: ${currentUrl}`;
-                
-                // Opens WhatsApp share window
-                const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
-                window.open(whatsappShareUrl, '_blank');
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareMessage)}`, '_blank');
             };
         }
+    }
 
         // 3. Load Related Products (Same Category)
         const relatedGrid = document.getElementById("relatedGrid");
@@ -234,12 +225,13 @@
                 relatedGrid.innerHTML = "<p style='color: gray;'>No other items in this category yet.</p>";
             }
         }
-    } else {
+     else {
         document.body.innerHTML = "<h2>Product not found! <a href='index.html'>Go Back</a></h2>";
     }
 
     // ... (Keep your top code until the reviewsContainer line)
 
+    // ... (Keep your code until the reviewsContainer line)
     const reviewsContainer = document.getElementById("reviewsContainer");
     const sampleReviews = [
         { name: "Anita R.", rating: "⭐⭐⭐⭐⭐", text: "The quality of the fabric is amazing. Exactly like the picture!" },
@@ -254,8 +246,15 @@
         </div>
     `).join('');
 
-    // --- FIX STARTS HERE ---
+    // --- LOGIC STARTS HERE ---
     if (product) {
+        // Define the buttons so the script knows what they are
+        const buyNowBtn = document.querySelector(".buy-now");
+        const whatsappBtn = document.getElementById("whatsappBtn");
+        const shareBtn = document.getElementById("shareBtn");
+        const orderPopup = document.getElementById("orderPopup");
+        const popupItemName = document.getElementById("popupItemName");
+
         // Handle the Sale Price Display
         if (product.originalPrice) {
             document.getElementById("itemPrice").innerHTML = `
@@ -266,7 +265,7 @@
             document.getElementById("itemPrice").innerText = "₹" + product.price;
         }
 
-        // Handle Multiple Images (using the correct ID: thumbRow)
+        // Display Thumbnails
         const thumbRow = document.getElementById("thumbRow");
         if (thumbRow && product.images && product.images.length > 1) {
             thumbRow.innerHTML = product.images.map(img => `
@@ -274,7 +273,80 @@
                      style="width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 5px; border: 2px solid #ddd;">
             `).join('');
         }
+
+        // Popup Logic
+        if (product.status !== "Sold Out") {
+            buyNowBtn.onclick = function() {
+                popupItemName.innerText = product.name;
+                orderPopup.style.display = "flex";
+            };
+            whatsappBtn.onclick = function() {
+                buyNowBtn.onclick(); 
+            };
+        }
+
+        // Share Logic
+        if (shareBtn) {
+            shareBtn.onclick = function() {
+                const currentUrl = window.location.href;
+                const shareMessage = `Check out this beautiful saree from S.R Collections! 😍\n\n*${product.name}*\nPrice: ₹${product.price}\n\nView here: ${currentUrl}`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareMessage)}`, '_blank');
+            };
+        }
     }
 </script>
+
+<div id="orderPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px; border-top: 5px solid #800000;">
+            <h2 style="color: #800000;">Thank You! ❤️</h2>
+            <p>Your order for <strong><span id="popupItemName"></span></strong> is ready.</p>
+            <p style="font-size: 14px; color: #666;">We are now redirecting you to WhatsApp to confirm your delivery details.</p>
+            <button onclick="closePopupAndGo()" style="background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                Continue to WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Define this function globally so the button can find it
+        function closePopupAndGo() {
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
+            const product = products.find(p => p.id == productId);
+            
+            if (product) {
+                const phoneNumber = "918151825736"; // Your real number
+                const message = `Hi S.R Collections! I want to order this saree: \nName: ${product.name} \nPrice: ₹${product.price}`;
+                const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }
+            document.getElementById("orderPopup").style.display = "none";
+        }
+
+        // Inside your main logic where you find the 'product'
+        if (product) {
+            // Select the buttons
+            const buyNowBtn = document.querySelector(".buy-now");
+            const whatsappBtn = document.getElementById("whatsappBtn");
+            const orderPopup = document.getElementById("orderPopup");
+            const popupItemName = document.getElementById("popupItemName");
+
+            if (product.status !== "Sold Out") {
+                buyNowBtn.onclick = function() {
+                    // This is where your error was happening - now it's fixed!
+                    if (popupItemName) {
+                        popupItemName.innerText = product.name;
+                    }
+                    if (orderPopup) {
+                        orderPopup.style.display = "flex";
+                    }
+                };
+
+                whatsappBtn.onclick = function() {
+                    buyNowBtn.onclick(); 
+                };
+            }
+        }
+    </script>
 </body>
 </html>
