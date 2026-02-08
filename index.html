@@ -181,20 +181,21 @@
     </div>
 
     <div class="filter-container" style="text-align: center; margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <button class="filter-btn" onclick="filterByCategory('All')">All</button>
-        <button class="filter-btn" onclick="filterByCategory('Silk')">Silk Sarees</button>
-        <button class="filter-btn" onclick="filterByCategory('Cotton')">Cotton</button>
-        <button class="filter-btn" onclick="filterByCategory('Designer')">Designer</button>
-        <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthi Sets</button>
-    </div>
+    <button class="filter-btn" onclick="filterByCategory('All')">All</button>
+    <button class="filter-btn" onclick="filterByCategory('Silk')">Silk Sarees</button>
+    <button class="filter-btn" onclick="filterByCategory('Cotton')">Cotton</button>
+    <button class="filter-btn" onclick="filterByCategory('Designer')">Designer</button>
+    <button class="filter-btn" onclick="filterByCategory('Kurthis')">Kurthi Sets</button>
+</div>
 
-    <div id="featuredSection">
-        <h2 style="text-align: center; color: #800000;">✨ Top Picks for You</h2>
-        <div id="featuredGrid" class="grid"></div>
-        <hr style="border: 0; border-top: 2px solid #eee; margin: 40px 0;">
-    </div>
 
-    <div id="shopGrid" class="grid"></div>
+<div id="featuredSection">
+    <h2 style="text-align: center; color: #800000;">✨ Top Picks for You</h2>
+    <div id="featuredGrid" class="grid"></div>
+    <hr style="border: 0; border-top: 2px solid #eee; margin: 40px 0;">
+</div>
+
+<div id="shopGrid" class="grid"></div>
 
     <div style="background: #fff; padding: 40px 20px; text-align: center; border-top: 1px solid #eee;">
     <h2 style="color: #800000;">How to Order?</h2>
@@ -218,8 +219,8 @@
             if (productsToDisplay.length === 0) {
                 shopGrid.innerHTML = `
                     <div style="text-align: center; width: 100%; padding: 50px;">
-                        <p style="font-size: 1.2rem; color: #666;">No sarees found. Try a different search! 🛍️</p>
-                        <button onclick="renderProducts(products)" style="background:#800000; color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer;">View All Sarees</button>
+                        <p style="font-size: 1.2rem; color: #666;">No items found. Try a different search! 🛍️</p>
+                        <button onclick="renderProducts(products)" style="background:#800000; color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer;">View All Products</button>
                     </div>`;
                 return;
             }
