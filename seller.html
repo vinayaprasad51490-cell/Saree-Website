@@ -8,6 +8,149 @@
         input { width: 90%; padding: 10px; margin: 10px 0; }
         button { background: green; color: white; padding: 10px; cursor: pointer; border: none; width: 100%; border-radius: 5px; }
         .inventory-card { display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; background: white; border-radius: 8px; }
+        footer {
+    background: #2c3e50;
+    color: white;
+    padding: 40px 20px;
+    margin-top: 60px;
+    font-family: sans-serif;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.footer-section h3 {
+    color: #ff9f00;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #800000;
+    display: inline-block;
+}
+
+.footer-section p, .footer-section a {
+    color: #bdc3c7;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: block;
+    margin: 10px 0;
+}
+
+.footer-section a:hover {
+    color: #ff9f00;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.bottom-bar {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid #3e4f5f;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+@media (max-width: 600px) {
+    .footer-container { text-align: center; }
+    .footer-section h3 { display: block; border-bottom: none; }
+}
+
+/* Floating Back to Top Button */
+#backToTop {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #800000; /* Matching your header */
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+
+#backToTop:hover {
+    background-color: #ff9f00; /* Turns orange on hover */
+    transform: scale(1.1);
+}
+
+/* Footer Styles */
+footer {
+    background: #2c3e50;
+    color: white;
+    padding: 40px 20px;
+    margin-top: 60px;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-section { min-width: 250px; flex: 1; }
+
+.footer-section h3 {
+    color: #ff9f00;
+    border-bottom: 2px solid #800000;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footer-section p { font-size: 0.9rem; line-height: 1.6; color: #ecf0f1; }
+
+.bottom-bar {
+    text-align: center;
+    border-top: 1px solid #34495e;
+    margin-top: 30px;
+    padding-top: 20px;
+    font-size: 0.8rem;
+}
+
+/* Universal Back to Top Button */
+#backToTop {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 50px !important;
+    height: 50px !important;
+    z-index: 9999 !important;
+    background-color: #800000 !important; /* Maroon to match your brand */
+    color: white !important;
+    border: none !important;
+    border-radius: 50% !important; /* Makes it a perfect circle */
+    cursor: pointer !important;
+    font-size: 24px !important;
+    line-height: 50px !important;
+    text-align: center !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+    transition: background 0.3s, transform 0.3s !important;
+    padding: 0 !important;
+}
+
+#backToTop:hover {
+    background-color: #ff9f00 !important; /* Turns orange on hover */
+    transform: scale(1.1) !important;
+}
     </style>
 </head>
 <body>
@@ -56,20 +199,23 @@
 
     <a href="index.html">Go to Customer Shop Page →</a>
 
-    <hr>
+
+   <hr>
     <h3>Your Current Inventory</h3>
-    <div id="inventoryList"></div>
+    <div id="inventoryContainer"></div>
 
     <br><br>
     <button onclick="clearAllProducts()" style="background: black; color: white; padding: 10px; width: 200px; cursor: pointer; border: none; border-radius: 5px;">
         🗑️ Clear Entire Shop
     </button>
 
-    
+     <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+
+
     <script src="app.js"></script>
 
     <script>
-        // 1. Security Check
+        // Security Check
         if (sessionStorage.getItem("isLoggedIn") !== "true") {
             window.location.href = "login.html";
         }
@@ -79,42 +225,62 @@
             window.location.href = "login.html";
         }
 
-        // 2. THIS IS THE KEY FIX: Wrapping the code in a named function
-        function displayInventory() {
-            const inventoryDiv = document.getElementById("inventoryList");
-            
-            if (!products || products.length === 0) {
-                inventoryDiv.innerHTML = "<p>Your shop is empty.</p>";
-                return;
+        // Inside your showInv() function in seller.html
+            // Add this to your showInv() function in seller.html
+            function showInv() {
+                document.getElementById("inv").innerHTML = products.map(p => `
+                    <div class="item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ddd;">
+                        <img src="${p.images[0]}" style="width:50px; height:50px; object-fit:cover;">
+                        <div><b>${p.name}</b></div>
+                        <div>
+                            <button onclick="toggleBestseller(${p.id})" style="background:${p.isFeatured ? 'gold' : 'gray'}; color:white; border:none; padding:5px; border-radius:3px; cursor:pointer;">
+                                ${p.isFeatured ? '★ Featured' : '☆ Make Top Pick'}
+                            </button>
+                            <button onclick="toggleStatus(${p.id})" style="background:red; color:white; border:none; padding:5px; border-radius:3px; margin-left:5px;">Sold Out</button>
+                        </div>
+                    </div>`).join('');
             }
 
-            inventoryDiv.innerHTML = products.map(p => `
-                <div class="inventory-card">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <img src="${p.images[0]}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px;">
-                        <div>
-                            <b>${p.name}</b>
-                            <div style="font-size: 12px; color: ${p.status === 'In Stock' ? 'green' : 'red'}; font-weight: bold;">
-                                ${p.status}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button onclick="toggleStatus(${p.id})" style="padding: 5px; cursor: pointer; font-size: 11px; width: auto; background: #eee; color: black;">
-                            Status
-                        </button>
-                        <button onclick="deleteProduct(${p.id})" style="background: #ff4d4d; color: white; border: none; padding: 5px; cursor: pointer; font-size: 11px; margin-left: 5px; width: auto;">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 3. Run when page loads
-        window.onload = displayInventory;
-
-        
+            function setBestseller(id) {
+                const p = products.find(prod => prod.id === id);
+                if(p) {
+                    p.status = (p.status === "Bestseller") ? "In Stock" : "Bestseller";
+                    saveData();
+                    location.reload();
+                }
+            }
     </script>
+
+   
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>S.R Collections</h3>
+            <p>Premium quality sarees and Kurthi sets. Elegance delivered to your doorstep.</p>
+            <p>📍 Textile District, India</p>
+        </div>
+
+        <div class="footer-section">
+            <h3>Customer Care</h3>
+            <p>✅ 7-Day Easy Exchange</p>
+            <p>✅ Damaged Product Return</p>
+            <p>✅ Opening Video Mandatory</p>
+        </div>
+
+        <div class="footer-section">
+            <h3>Connect With Us</h3>
+            <p>📞 +91 81518 25736</p>
+            <p>
+                <a href="https://www.instagram.com/s.r.collections_26" style="color:white; text-decoration:none;">Instagram</a> | 
+                <a href="https://chat.whatsapp.com/GvyJMgOVvVoBpmypK1QJxf" style="color:white; text-decoration:none;">WhatsApp</a>
+            </p>
+        </div>
+    </div>
+    <div class="bottom-bar">
+        &copy; 2026 S.R Collections. Always open for your style.
+    </div>
+</footer>
+
+</body>
 </body>
 </html>
